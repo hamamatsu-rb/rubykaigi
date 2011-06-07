@@ -24,6 +24,7 @@ gem 'twitter', '0.9.8'
 gem 'rails_warden'
 gem 'warden_oauth'
 gem 'warden-openid'
+gem 'omniauth', '>= 0.2.6'
 
 gem 'ri_cal', :git => "git://github.com/ctide/ri_cal.git"
 
