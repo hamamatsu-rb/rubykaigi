@@ -153,7 +153,7 @@ describe AccountsController do
         get :edit
       end
 
-      it { response.should redirect_to(new_sessions_path) }
+      it { response.should redirect_to(signin_path) }
     end
   end
 
@@ -189,7 +189,7 @@ describe AccountsController do
         get :edit
       end
 
-      it { response.should redirect_to(new_sessions_path) }
+      it { response.should redirect_to(signin_path) }
     end
   end
 end
