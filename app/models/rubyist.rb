@@ -12,14 +12,13 @@ class Rubyist < ActiveRecord::Base
 
   validates_format_of :website, :with => URI.regexp(%w(http https)), :allow_blank => true
 
-  validates_uniqueness_of :twitter_user_id, :allow_nil => true
-  validates_uniqueness_of :identity_url, :allow_nil => true
-
   validates_inclusion_of :avatar_type, :in => %w(default twitter gravatar)
 
-  attr_protected :twitter_user_id, :identity_url
+  validates :uid, :uniqueness => true, :presence => true
 
-  value :twitter_profile, :key => "#{TwitterProfile::PREFIX}/\#{twitter_user_id}", :marshal => true
+  attr_protected :uid
+
+  value :twitter_profile, :key => "#{TwitterProfile::PREFIX}/\#{uid}", :marshal => true
 
   def to_param
     username
@@ -95,5 +94,4 @@ class Rubyist < ActiveRecord::Base
   def __attendee?(kaigi_year)
     contribution_types_of(kaigi_year).include?('attendee')
   end
-
 end

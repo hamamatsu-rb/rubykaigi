@@ -15,15 +15,13 @@ Rubykaigi::Application.routes.draw do
     match 'schedule/all.:format' => 'schedule#all'
   end
 
-  match 'signin', :to => 'sessions#new', :as => 'signin'
-  delete 'signout', :to => 'sessions#destroy', :as => 'signout'
+  match '/auth/failure'            => 'sessions#failure'
+  match '/auth/:provider/callback' => 'sessions#create'
+  match '/signin'                  => 'sessions#new', :as => :signin
+  match '/signout'                 => 'sessions#destroy', :as => :signout
+
   match 'my_tickets', :to => 'tickets#index', :as => "my_tickets"
 
-  resource :sessions do
-    collection do
-      get :unauthenticated
-    end
-  end
   resource :account
   resources :rubyists
 

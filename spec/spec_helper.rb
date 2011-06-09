@@ -75,6 +75,8 @@ Spork.prefork do
       DatabaseCleaner.clean
     end
   end
+
+  OmniAuth.config.test_mode = true
 end
 
 Spork.each_run do

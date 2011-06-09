@@ -4,7 +4,7 @@ describe AccountsController do
   describe 'GET /account/new' do
     context 'with Twitter credentials' do
       before do
-        session[:params_from_authenticator] = {:twitter_user_id => 4567}
+        session[:params_from_authenticator] = {:uid => 4567}
         get :new
       end
 
@@ -13,7 +13,7 @@ describe AccountsController do
 
     context 'with OpenID credentials' do
       before do
-        session[:params_from_authenticator] = {:identity_url => 'http://ursm.jp/'}
+        session[:params_from_authenticator] = {:uid => 'http://ursm.jp/'}
         get :new
       end
 
@@ -25,14 +25,14 @@ describe AccountsController do
         get :new
       end
 
-      it { response.should redirect_to(new_sessions_path) }
+      it { response.should redirect_to(signin_path) }
     end
   end
 
   describe 'POST /account' do
 
     def post_create_account_with_mock
-      mock(controller).user = is_a(Rubyist)
+      #mock(controller).user = is_a(Rubyist) # XXX 何に使ってたのかまだ理解してないので確認したい
       post :create, :rubyist => Rubyist.plan
     end
 
@@ -58,7 +58,7 @@ describe AccountsController do
 
     context 'with Twitter credentials' do
       before do
-        session[:params_from_authenticator] = {:twitter_user_id => 4567}
+        session[:params_from_authenticator] = {:uid => "4567"}
       end
 
       context 'saved' do
@@ -67,7 +67,7 @@ describe AccountsController do
         end
 
         it_should_behave_like 'Signed up successfully without return_to'
-        it { assigns[:rubyist].twitter_user_id.should == 4567 }
+        it { assigns[:rubyist].uid.should == "4567" }
       end
 
       context 'saved with return_to' do
@@ -77,7 +77,7 @@ describe AccountsController do
         end
         
         it_should_behave_like 'Signed up successfully with return_to'
-        it { assigns[:rubyist].twitter_user_id.should == 4567 }
+        it { assigns[:rubyist].uid.should == "4567" }
       end
 
       context 'failed' do
@@ -87,13 +87,13 @@ describe AccountsController do
         end
         
         it_should_behave_like 'Signed up failed'
-        it { session[:params_from_authenticator][:twitter_user_id].should == 4567 }
+        it { session[:params_from_authenticator][:uid].should == "4567" }
       end
     end
 
     context 'with OpenID credentials' do
       before do
-        session[:params_from_authenticator] = {:identity_url => 'http://ursm.jp/'}
+        session[:params_from_authenticator] = {:uid => 'http://ursm.jp/'}
       end
 
       context 'saved' do
@@ -102,7 +102,7 @@ describe AccountsController do
         end
 
         it_should_behave_like 'Signed up successfully without return_to'
-        it { assigns[:rubyist].identity_url.should == 'http://ursm.jp/' }
+        it { assigns[:rubyist].uid.should == 'http://ursm.jp/' }
       end
 
       context 'saved with return URL' do
@@ -112,7 +112,7 @@ describe AccountsController do
         end
 
         it_should_behave_like 'Signed up successfully with return_to'
-        it { assigns[:rubyist].identity_url.should == 'http://ursm.jp/' }
+        it { assigns[:rubyist].uid.should == 'http://ursm.jp/' }
       end
 
       context 'failed' do
@@ -122,7 +122,7 @@ describe AccountsController do
         end
         
         it_should_behave_like 'Signed up failed'
-        it { session[:params_from_authenticator][:identity_url].should == 'http://ursm.jp/' }
+        it { session[:params_from_authenticator][:uid].should == 'http://ursm.jp/' }
       end
     end
 
@@ -131,14 +131,14 @@ describe AccountsController do
         post :create, :rubyist => {:username => 'ursm'}
       end
 
-      it { response.should redirect_to(new_sessions_path) }
+      it { response.should redirect_to(signin_path) }
     end
   end
 
   describe 'GET /account/edit' do
     context 'signed in' do
       before do
-        @ursm = Rubyist.make
+        @ursm = Rubyist.make(:uid => "1234")
         sign_in_as @ursm
         get :edit
       end
@@ -160,7 +160,7 @@ describe AccountsController do
   describe 'POST /account' do
     context 'signed in' do
       before do
-        @ursm = Rubyist.make
+        @ursm = Rubyist.make(:uid => "1234")
         sign_in_as @ursm
       end
 

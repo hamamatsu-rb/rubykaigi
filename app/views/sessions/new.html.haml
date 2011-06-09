@@ -14,18 +14,18 @@
   %article#signin
     %h2 You can Sign in/up with OAuth/OpenID
     %p.btn
-      != link_to image_tag('/2011/images/registerBtnTwitter.png', :alt => 'via Twitter'), sessions_path(:warden_oauth_provider => 'twitter')
+      != link_to image_tag('/2011/images/registerBtnTwitter.png', :alt => 'via Twitter'), "/auth/twitter"
     %p.btn
-      != link_to image_tag('/2011/images/registerBtnGoogle.png', :alt => 'via Google'), sessions_path(:openid_identifier => 'https://www.google.com/accounts/o8/id')
+      != link_to image_tag('/2011/images/registerBtnGoogle.png', :alt => 'via Google'), "/auth/open_id?openid_url=https://www.google.com/accounts/o8/id"
     %p.btn
-      != link_to image_tag('/2011/images/registerBtnYahoo.png', :alt => 'via Yahoo!'), sessions_path(:openid_identifier => 'http://yahoo.com')
+      != link_to image_tag('/2011/images/registerBtnYahoo.png', :alt => 'via Yahoo!'), "/auth/open_id?openid_url=http://yahoo.com"
     %p.btn
-      != link_to image_tag('/2011/images/registerBtnYahooJapan.png', :alt => 'via Yahoo!JAPAN'), sessions_path(:openid_identifier => 'http://yahoo.co.jp')
+      != link_to image_tag('/2011/images/registerBtnYahooJapan.png', :alt => 'via Yahoo!JAPAN'), "/auth/open_id?openid_url=http://yahoo.co.jp"
     %p.btn
-      != link_to image_tag('/2011/images/registerBtnMixi.png', :alt => 'via mixi'), sessions_path(:openid_identifier => 'http://mixi.jp')
+      != link_to image_tag('/2011/images/registerBtnMixi.png', :alt => 'via mixi'), "/auth/open_id?openid_url=http://mixi.jp"
     %p.cleft
       or signin via other OpenID providers:
-      != form_tag sessions_path, :method => :get do
+      != form_tag "/auth/open_id", :method => :get do
         %p
-          != text_field_tag :openid_identifier
+          != text_field_tag :openid_url
           != submit_tag 'Sign in'
