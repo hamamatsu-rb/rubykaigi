@@ -21,9 +21,6 @@ gem 'redis-objects', :require => 'redis/objects'
 gem 'SystemTimer'
 gem 'twitter', '0.9.8'
 
-gem 'rails_warden'
-gem 'warden_oauth'
-gem 'warden-openid'
 gem 'omniauth', '>= 0.2.6'
 gem 'oa-oauth', :require => "omniauth/oauth"
 gem 'tapp'
