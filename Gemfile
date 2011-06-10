@@ -22,7 +22,6 @@ gem 'SystemTimer'
 gem 'twitter', '0.9.8'
 
 gem 'omniauth', '>= 0.2.6'
-gem 'oa-oauth', :require => "omniauth/oauth"
 gem 'tapp'
 
 gem 'ri_cal', :git => "git://github.com/ctide/ri_cal.git"

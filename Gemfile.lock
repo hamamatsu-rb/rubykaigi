@@ -295,7 +295,6 @@ DEPENDENCIES
   moro-miso
   mysql
   nokogiri
-  oa-oauth
   omniauth (>= 0.2.6)
   rack-google-analytics (= 0.6.1)
   rails (= 3.0.6)
