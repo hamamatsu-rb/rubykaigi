@@ -4,7 +4,8 @@ describe AccountsController do
   describe 'GET /account/new' do
     context 'with Twitter credentials' do
       before do
-        session[:params_from_authenticator] = {:uid => 4567}
+        session[:params_from_authenticator] = {:uid => '4567', :provider => 'twitter',
+                                               :user_info => {:nickname => 'hibariya', :name => 'Hibariya Hi'}}
         get :new
       end
 
@@ -13,7 +14,8 @@ describe AccountsController do
 
     context 'with OpenID credentials' do
       before do
-        session[:params_from_authenticator] = {:uid => 'http://ursm.jp/'}
+        session[:params_from_authenticator] = {:uid => 'http://ursm.jp/', :provider => 'open_id',
+                                               :user_info => {:name => 'hibariya'}}
         get :new
       end
 
@@ -30,7 +32,6 @@ describe AccountsController do
   end
 
   describe 'POST /account' do
-
     def post_create_account_with_mock
       #mock(controller).user = is_a(Rubyist) # XXX 何に使ってたのかまだ理解してないので確認したい
       post :create, :rubyist => Rubyist.plan
@@ -58,7 +59,8 @@ describe AccountsController do
 
     context 'with Twitter credentials' do
       before do
-        session[:params_from_authenticator] = {:uid => "4567"}
+        session[:params_from_authenticator] = {:uid => '4567', :provider => 'twitter',
+                                               :user_info => {:nickname => 'hibariya', :name => 'Hibariya Hi'}}
       end
 
       context 'saved' do
@@ -67,7 +69,7 @@ describe AccountsController do
         end
 
         it_should_behave_like 'Signed up successfully without return_to'
-        it { assigns[:rubyist].uid.should == "4567" }
+        it { assigns[:rubyist].authentications.last.uid.should == '4567' }
       end
 
       context 'saved with return_to' do
@@ -75,9 +77,9 @@ describe AccountsController do
           session[:return_to] = 'http://example.com/return_to'
           post_create_account_with_mock
         end
-        
+
         it_should_behave_like 'Signed up successfully with return_to'
-        it { assigns[:rubyist].uid.should == "4567" }
+        it { assigns[:rubyist].authentications.last.uid.should == '4567' }
       end
 
       context 'failed' do
@@ -85,15 +87,16 @@ describe AccountsController do
           dont_allow(controller).user = anything
           post :create, :rubyist => Rubyist.plan(:invalid)
         end
-        
+
         it_should_behave_like 'Signed up failed'
-        it { session[:params_from_authenticator][:uid].should == "4567" }
+        it { session[:params_from_authenticator][:uid].should == '4567' }
       end
     end
 
     context 'with OpenID credentials' do
       before do
-        session[:params_from_authenticator] = {:uid => 'http://ursm.jp/'}
+        session[:params_from_authenticator] = {:uid => 'http://ursm.jp/', :provider => 'open_id',
+                                               :user_info => {:name => 'hibariya'}}
       end
 
       context 'saved' do
@@ -102,7 +105,7 @@ describe AccountsController do
         end
 
         it_should_behave_like 'Signed up successfully without return_to'
-        it { assigns[:rubyist].uid.should == 'http://ursm.jp/' }
+        it { assigns[:rubyist].authentications.last.uid.should == 'http://ursm.jp/' }
       end
 
       context 'saved with return URL' do
@@ -112,7 +115,7 @@ describe AccountsController do
         end
 
         it_should_behave_like 'Signed up successfully with return_to'
-        it { assigns[:rubyist].uid.should == 'http://ursm.jp/' }
+        it { assigns[:rubyist].authentications.last.uid.should == 'http://ursm.jp/' }
       end
 
       context 'failed' do
@@ -120,7 +123,7 @@ describe AccountsController do
           dont_allow(controller).user = anything
           post :create, :rubyist => Rubyist.plan(:invalid)
         end
-        
+
         it_should_behave_like 'Signed up failed'
         it { session[:params_from_authenticator][:uid].should == 'http://ursm.jp/' }
       end
@@ -138,7 +141,7 @@ describe AccountsController do
   describe 'GET /account/edit' do
     context 'signed in' do
       before do
-        @ursm = Rubyist.make(:uid => "1234")
+        @ursm = Rubyist.make(:authentications => [Authentication.new(:provider => 'twitter', :uid => '12345')])
         sign_in_as @ursm
         get :edit
       end
@@ -160,7 +163,7 @@ describe AccountsController do
   describe 'POST /account' do
     context 'signed in' do
       before do
-        @ursm = Rubyist.make(:uid => "1234")
+        @ursm = Rubyist.make(:authentications => [Authentication.new(:provider => 'twitter', :uid => '12345')])
         sign_in_as @ursm
       end
 
