@@ -3,7 +3,7 @@
 #content
   %h1= @title
 
-  - form_for @rubyist, :url => account_path do |form|
+  = form_for @rubyist, :url => account_path do |form|
     != render :partial => form
 
     -#     %dl

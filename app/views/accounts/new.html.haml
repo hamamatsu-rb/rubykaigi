@@ -1,6 +1,6 @@
 - @title = t(:account_settings)
 #content
   %h1 Account Settings
-  - form_for @rubyist, :url => account_path do |form|
+  = form_for @rubyist, :url => account_path do |form|
     != render :partial => form
     != form.submit 'Sign up'
