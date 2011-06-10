@@ -23,7 +23,7 @@ class ApplicationController < ActionController::Base
   private
 
   def user
-    @user ||= Rubyist.find_by_id session[:user_id]
+    @user ||= Rubyist.find_by_id session[:rubyist_id]
   end
 
   def authenticated?

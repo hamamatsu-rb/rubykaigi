@@ -5,6 +5,7 @@ class Rubyist < ActiveRecord::Base
 
   has_many :contributions
   has_many :tickets
+  has_many :authentications
 
   validates_uniqueness_of :username
   validates_format_of :username, :with => /^[a-zA-Z0-9_-]+$/, :message => I18n.t('should_be_alphabetical')
@@ -14,11 +15,14 @@ class Rubyist < ActiveRecord::Base
 
   validates_inclusion_of :avatar_type, :in => %w(default twitter gravatar)
 
-  validates :uid, :uniqueness => true, :presence => true
-
-  attr_protected :uid
-
   value :twitter_profile, :key => "#{TwitterProfile::PREFIX}/\#{uid}", :marshal => true
+
+  def self.new_with_omniauth(auth)
+    self.new :username  => auth[:user_info][:nickname],
+             :full_name => auth[:user_info][:name],
+             :email     => auth[:user_info][:email],
+             :authentications => [Authentication.new(auth.slice(:provider, :uid))]
+  end
 
   def to_param
     username

@@ -239,6 +239,7 @@ GEM
     spork (0.8.5)
     steak (1.1.0)
       rspec (>= 1.3)
+    tapp (1.0.0)
     term-ansicolor (1.0.5)
     thin (1.2.11)
       daemons (>= 1.0.9)
@@ -317,6 +318,7 @@ DEPENDENCIES
   rspec-rails (= 2.5.0)
   spork
   steak
+  tapp
   thin
   twitter (= 0.9.8)
   warden-openid

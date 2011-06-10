@@ -4,19 +4,15 @@ class AccountsController < ApplicationController
   layout_for_latest_ruby_kaigi
 
   def new
-    @rubyist = Rubyist.new(session[:params_from_authenticator]) do |r|
-      r.uid = session[:params_from_authenticator][:uid]
-    end
+    @rubyist = Rubyist.new_with_omniauth(session[:params_from_authenticator])
   end
 
   def create
-    @rubyist = Rubyist.new(session[:params_from_authenticator]) do |r|
-      r.attributes = params[:rubyist]
-      r.uid = session[:params_from_authenticator][:uid]
-    end
+    @rubyist = Rubyist.new_with_omniauth(session[:params_from_authenticator])
+    @rubyist.attributes = params[:rubyist]
 
     if @rubyist.save
-      session[:user_id] = @rubyist.id
+      session[:rubyist_id] = @rubyist.id
       session.delete(:params_from_authenticator)
 
       redirect_to session.delete(:return_to) || root_path

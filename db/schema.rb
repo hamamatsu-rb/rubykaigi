@@ -10,7 +10,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110607141142) do
+ActiveRecord::Schema.define(:version => 20110610033254) do
+
+  create_table "authentications", :force => true do |t|
+    t.string   "provider",   :null => false
+    t.string   "uid",        :null => false
+    t.integer  "rubyist_id", :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "contributions", :force => true do |t|
     t.integer  "rubyist_id",        :null => false
@@ -189,8 +197,6 @@ ActiveRecord::Schema.define(:version => 20110607141142) do
     t.string   "full_name"
     t.string   "website"
     t.string   "avatar_type",     :default => "default", :null => false
-    t.string   "provider"
-    t.string   "uid"
   end
 
   add_index "rubyists", ["identity_url"], :name => "index_rubyists_on_identity_url", :unique => true

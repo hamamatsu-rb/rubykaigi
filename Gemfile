@@ -26,6 +26,7 @@ gem 'warden_oauth'
 gem 'warden-openid'
 gem 'omniauth', '>= 0.2.6'
 gem 'oa-oauth', :require => "omniauth/oauth"
+gem 'tapp'
 
 gem 'ri_cal', :git => "git://github.com/ctide/ri_cal.git"
 

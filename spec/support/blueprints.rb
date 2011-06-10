@@ -10,7 +10,10 @@ Sham.sort_order(:unique => true) {|i| i }
 
 Rubyist.blueprint do
   username
-  provider { "twitter" }
+end
+
+Authentication.blueprint do
+  provider { 'twitter' }
 end
 
 Rubyist.blueprint :invalid do

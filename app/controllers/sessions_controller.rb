@@ -5,9 +5,9 @@ class SessionsController < ApplicationController
   end
 
   def create
-    auth = request.env["omniauth.auth"]
-    if user = Rubyist.where(:provider => auth[:provider], :uid => auth[:uid]).first
-      session[:user_id] = user.id
+    auth = request.env["omniauth.auth"].symbolize_keys
+    if authentication = Authentication.where(:provider => auth[:provider], :uid => auth[:uid]).first
+      session[:rubyist_id] = authentication.rubyist_id
       redirect_to session.delete(:return_to) || dashboard_path
     else
       store_auth_params(auth)
@@ -16,7 +16,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    session.delete :user_id
+    session.delete :rubyist_id
     redirect_to signin_path, :notice => 'You have signed out successfully'
   end
 
@@ -27,22 +27,9 @@ class SessionsController < ApplicationController
 
   private
 
-  def store_auth_params(auth)
-    store_twitter_profile(auth) if auth[:provider] == 'twitter'
-    paramz = auth.slice(:provider, :uid)
-    paramz[:email]     = auth[:user_info][:email]
-    paramz[:username]  = auth[:user_info][:nickname]
-    paramz[:full_name] = auth[:user_info][:name]
-    session[:params_from_authenticator] = paramz
-  end
-
-  def store_twitter_profile(auth)
-    begin
-      profile = {:screen_name       => auth[:user_info][:nickname],
-                 :profile_image_url => auth[:user_info][:image]}
-      TwitterProfile[auth[:uid]] = profile
-    rescue Errno::ECONNREFUSED => e
-      Rails.logger.warn e
+    def store_auth_params(auth)
+      paramz = auth.slice(:provider, :uid)
+      paramz[:user_info] = auth[:user_info].symbolize_keys.slice(:email, :nickname, :name)
+      session[:params_from_authenticator] = paramz
     end
-  end
 end
