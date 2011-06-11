@@ -42,7 +42,7 @@ class AccountsController < ApplicationController
     end
   rescue ActiveRecord::RecordInvalid
     @rubyist = user
-    @rubyist.errors.merge! password_auth.errors
+    @rubyist.errors.merge! password_auth.errors if password_auth
     render :edit
   end
 end
