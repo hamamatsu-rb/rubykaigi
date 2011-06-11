@@ -12,7 +12,7 @@ class AccountsController < ApplicationController
     @rubyist.attributes = params[:rubyist]
 
     if @rubyist.save
-      session[:rubyist_id] = @rubyist.id
+      session[:user_id] = @rubyist.id
       session.delete(:params_from_authenticator)
 
       redirect_to session.delete(:return_to) || root_path

@@ -8,7 +8,7 @@ class SessionsController < ApplicationController
     auth = request.env["omniauth.auth"].symbolize_keys
 
     if authentication = Authentication.where(:provider => auth[:provider], :uid => auth[:uid]).first
-      session[:rubyist_id] = authentication.rubyist_id
+      session[:user_id] = authentication.rubyist_id
       redirect_to session.delete(:return_to) || dashboard_path
     else
       if auth[:provider] == 'password'
@@ -22,7 +22,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    session.delete :rubyist_id
+    session.delete :user_id
     redirect_to signin_path, :notice => 'You have signed out successfully'
   end
 
