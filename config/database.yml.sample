@@ -1,5 +1,5 @@
 development:
-  adapter: mysql
+  adapter: mysql2
   encoding: utf8
   database: rubykaigi_development
   username: root
@@ -13,7 +13,7 @@ development:
     db: 0
 
 test: &TEST
-  adapter: mysql
+  adapter: mysql2
   encoding: utf8
   database: rubykaigi_test
   username: root
@@ -27,7 +27,7 @@ test: &TEST
     db: 1
 
 production:
-  adapter: mysql
+  adapter: mysql2
   encoding: utf8
   database: rubykaigi
   username: rubykaigi

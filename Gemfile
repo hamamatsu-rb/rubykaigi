@@ -5,13 +5,14 @@ source 'http://gems.github.com'
 gem 'rails', '3.0.6', :require => nil
 gem 'rake', '~> 0.8.7'
 gem 'jquery-rails', '>= 0.2.6'
-gem 'mysql'
+gem 'mysql2', '~> 0.2.7'
 gem 'configatron'
 gem "ambethia-smtp-tls", :require => "smtp-tls"
 gem "fastercsv"
 gem "hoptoad_notifier"
 gem 'i18n_generators'
 gem 'haml'
+gem 'sass'
 gem 'fastercsv'
 gem 'whenever', '0.6.7', :require => false
 gem 'delayed_job'
