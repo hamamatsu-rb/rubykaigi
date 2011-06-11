@@ -1,6 +1,14 @@
 require 'acceptance/acceptance_helper'
 
+shared_context 'signout after all' do
+  after :all do
+    click_link 'Sign out' rescue nil # XXX scenarioが上から順番に実行されるわけではないらしいので必要。rescue nilどうにかしたい
+  end
+end
+
 feature 'ユーザとして初めてOAuthでログインする' do 
+  include_context 'signout after all'
+
   background do
     OmniAuth.config.mock_auth[:twitter] = {
       :provider  => 'twitter',
@@ -8,10 +16,6 @@ feature 'ユーザとして初めてOAuthでログインする' do
       :user_info => {:nickname => 'hibariya', :name => 'Hibariya Hi'}
     }
     visit '/auth/twitter'
-  end
-
-  after :all do
-    click_link 'Sign out'
   end
 
   scenario '認証後にはアカウント編集画面が表示されること' do
@@ -30,17 +34,15 @@ feature 'ユーザとして初めてOAuthでログインする' do
 end
 
 feature 'ユーザとして初めてOpenIDでログインする' do
-   background do
+  include_context 'signout after all'
+
+  background do
     OmniAuth.config.mock_auth[:open_id] = {
       :provider  => 'open_id',
       :uid       => 'https://www.google.com/accounts/o8/id?i://www.google.com/accounts/o8/id?id=hibariya',
       :user_info => {:email => 'hibariya@gmail.com', :name => 'Hibariya Hi'}
     }
     visit '/auth/open_id'
-  end
-
-  after :all do
-    click_link 'Sign out'
   end
 
   scenario '認証後にはアカウント編集画面が表示されること' do
@@ -60,6 +62,8 @@ feature 'ユーザとして初めてOpenIDでログインする' do
 end
 
 feature '既存のユーザとしてログインする' do 
+  include_context 'signout after all'
+
   let!(:rubyist) do
     Rubyist.create!(:full_name => 'Hibariya Hi', :username => 'hibariya') do |r|
       r.authentications = [Authentication.new(:provider => 'twitter', :uid => 12345)]
@@ -77,17 +81,12 @@ feature '既存のユーザとしてログインする' do
     visit '/auth/twitter'
   end
 
-  after :all do
-    click_link 'Sign out'
-  end
-
   scenario '認証後にはダッシュボードが表示されていること' do
     page.current_path.should eq dashboard_path
   end
 end
 
-feature '既存のユーザとしてパスワード認証でログインする' do
-  let(:encrypter) { OmniAuth::Strategies::Password.new(nil, Rubykaigi::Application.config.secret_token) }
+shared_context "password authentication" do
   let(:authentication) { rubyist.authentications.last }
 
   let!(:rubyist) do
@@ -95,6 +94,11 @@ feature '既存のユーザとしてパスワード認証でログインする' 
       r.authentications = [Authentication.new(:provider => 'password', :uid => 'encrypted_password')]
     end
   end
+end
+
+feature '既存のユーザとしてパスワード認証でログインする' do
+  include_context 'password authentication'
+  include_context 'signout after all'
 
   background do
     OmniAuth.config.mock_auth[:password] = {
@@ -105,11 +109,29 @@ feature '既存のユーザとしてパスワード認証でログインする' 
     visit '/auth/password'
   end
 
-  after :all do
-    click_link 'Sign out'
-  end
-
   scenario '認証後にはダッシュボードが表示されていること' do
     page.current_path.should eq dashboard_path
+  end
+end
+
+feature 'パスワード認証に失敗した場合' do
+  include_context "password authentication"
+  include_context 'signout after all'
+
+  background do
+    OmniAuth.config.mock_auth[:password] = {
+      :provider  => 'password',
+      :uid       => 'invalid_password',
+      :user_info => {:username => rubyist.username}
+    }
+    visit '/auth/password'
+  end
+
+  scenario 'サインイン画面に遷移すること' do
+    page.current_path.should eq signin_path
+  end
+
+  scenario 'エラーメッセージが表示されていること' do
+    find('#flash .error').should have_content('Authentication error: Invalid username or password')
   end
 end

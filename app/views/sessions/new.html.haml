@@ -28,11 +28,11 @@
       != form_tag "/auth/open_id", :method => :get do
         %p
           != text_field_tag :openid_url
-          != submit_tag 'Sign in'
+          != submit_tag 'Sign in', :id => :signin_with_openid
     %p.cleft
       or signin with password:
       != form_tag "/auth/password", :method => :post do
         %p
           != text_field_tag :identifier, nil, :placeholder => "Username"
           != password_field_tag :password, nil, :placeholder => "Password"
-          != submit_tag 'Sign in'
+          != submit_tag 'Sign in', :id => :signin_with_password

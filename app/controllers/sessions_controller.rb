@@ -6,12 +6,18 @@ class SessionsController < ApplicationController
 
   def create
     auth = request.env["omniauth.auth"].symbolize_keys
+
     if authentication = Authentication.where(:provider => auth[:provider], :uid => auth[:uid]).first
       session[:rubyist_id] = authentication.rubyist_id
       redirect_to session.delete(:return_to) || dashboard_path
     else
-      store_auth_params(auth)
-      redirect_to new_account_path
+      if auth[:provider] == 'password'
+        flash[:error] = "Authentication error: Invalid username or password"
+        redirect_to signin_path
+      else
+        store_auth_params(auth)
+        redirect_to new_account_path
+      end
     end
   end
 
