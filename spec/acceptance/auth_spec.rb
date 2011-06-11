@@ -6,7 +6,7 @@ shared_context 'signout after all' do
   end
 end
 
-feature 'ユーザとして初めてOAuthでログインする' do 
+feature 'ユーザとして初めてOAuthでログインする' do
   include_context 'signout after all'
 
   background do
@@ -61,7 +61,7 @@ feature 'ユーザとして初めてOpenIDでログインする' do
   end
 end
 
-feature '既存のユーザとしてログインする' do 
+feature '既存のユーザとしてログインする' do
   include_context 'signout after all'
 
   let!(:rubyist) do

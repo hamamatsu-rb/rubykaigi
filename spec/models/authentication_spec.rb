@@ -3,12 +3,12 @@ require 'spec_helper'
 describe Authentication do
   describe "パスワード変更" do
     let(:rubyist) { Rubyist.make }
-    let(:authentication) { 
+    let(:authentication) {
       Authentication.make :provider => 'password',
                           :uid => Authentication.encrypt_password(rubyist.username, 'password'),
                           :rubyist => rubyist
     }
-    
+
     subject do
       authentication.current_password      = 'password'
       authentication.password              = 'new_password'

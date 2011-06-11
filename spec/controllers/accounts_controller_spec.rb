@@ -33,7 +33,6 @@ describe AccountsController do
 
   describe 'POST /account' do
     def post_create_account_with_mock
-      #mock(controller).user = is_a(Rubyist) # XXX 何に使ってたのかまだ理解してないので確認したい
       post :create, :rubyist => Rubyist.plan
     end
 
