@@ -36,7 +36,7 @@ class ApplicationController < ActionController::Base
   def login_required
     return true if user
 
-    session[:return_to] = request.request_uri
+    session[:return_to] = request.fullpath
     redirect_to signin_path
     false
   end
