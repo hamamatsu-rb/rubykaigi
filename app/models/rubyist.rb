@@ -17,6 +17,10 @@ class Rubyist < ActiveRecord::Base
 
   value :twitter_profile, :key => "#{TwitterProfile::PREFIX}/\#{uid}", :marshal => true
 
+  def password_authentication
+    authentications.where(:provider => 'password').last
+  end
+
   def self.new_with_omniauth(auth)
     self.new :username  => auth[:user_info][:nickname],
              :full_name => auth[:user_info][:name],

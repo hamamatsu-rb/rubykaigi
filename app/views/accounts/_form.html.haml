@@ -10,15 +10,29 @@
   %dt!= form.label :username
   %dd!= form.text_field :username
   username will be used for a permalink like: #{'http://rubykaigi.org/rubyists/#{username}'}<br />
-  <br />
+  %br
   %dt!= form.label :full_name
   %dd!= form.text_field :full_name
-  <br />
+  %br
   %dt
     != form.label :email
     (also use to fetch your icon via <a href="http://gravatar.com">gravatar.com</a>)
   %dd!= form.text_field :email
-  <br />
+  %br
   %dt!= form.label :website
   %dd!= form.text_field :website
-  <br />
+  - if @rubyist.password_authentication
+    %h2 Password
+    %dt
+      %label{:for => :current_password} Current Password
+    %dd!= password_field_tag :current_password
+    %br
+    %dt
+      %label{:for => :password} New Password
+    %dd!= password_field_tag :password
+    %br
+    %dt
+      %label{:for => :password_confirmation} Password Confirmation
+    %dd!= password_field_tag :password_confirmation
+    %br
+

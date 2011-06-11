@@ -28,12 +28,21 @@ class AccountsController < ApplicationController
   end
 
   def update
-    if user.update_attributes(params[:rubyist])
+    password_auth = user.password_authentication
+
+    Rubyist.transaction do
+      user.update_attributes! params[:rubyist]
+
+      if password_auth && params[:password]
+        password_auth.change_password! params.slice(:current_password, :password, :password_confirmation)
+      end
+
       flash[:notice] = 'Your settings have been saved.'
       redirect_to edit_account_path
-    else
-      @rubyist = user
-      render :edit
     end
+  rescue ActiveRecord::RecordInvalid
+    @rubyist = user
+    @rubyist.errors.merge! password_auth.errors
+    render :edit
   end
 end
