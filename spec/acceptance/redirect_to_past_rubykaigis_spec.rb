@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/acceptance_helper'
+require 'acceptance/acceptance_helper'
 
 feature 'RubyKaigi2008以前の公式サイトへのリダイレクト', %q{
   RubyKaigi2008以前のURLは覚えづらいようなので、

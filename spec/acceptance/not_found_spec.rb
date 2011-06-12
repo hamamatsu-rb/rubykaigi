@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/acceptance_helper'
+require 'acceptance/acceptance_helper'
 
 feature 'page does not found' do
   scenario "/2010/ja/registration" do

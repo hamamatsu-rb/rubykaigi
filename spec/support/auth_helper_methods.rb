@@ -1,4 +1,4 @@
-module WardenHelperMethods
+module AuthHelperMethods
   def sign_in_as(rubyist)
     stub(controller) {
       user { rubyist }

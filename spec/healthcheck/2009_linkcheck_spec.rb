@@ -42,6 +42,8 @@ module LinkCheckMacro
       # internal link only
       links = page.search('a').map{|e|e.attr('href')}.compact.uniq.select{|u| u =~ %r!\A/!}
       specify_all_paths_return_success(base_url, links)
+    rescue Errno::ECONNREFUSED
+      pending 'server not available'
     end
   end
 end

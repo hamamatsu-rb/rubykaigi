@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe TimetableController do
+describe ScheduleController do
 
   describe "GET 'index'" do
     it "should be successful" do
