@@ -7,7 +7,7 @@ describe Admin::RubyistsController do
       get :index
     end
 
-    it { response.should redirect_to(new_sessions_path) }
+    pending { response.should redirect_to(new_sessions_path) }
   end
 
   context '一般参加者としてログインしている' do
@@ -16,7 +16,7 @@ describe Admin::RubyistsController do
       get :index
     end
 
-    it { response.response_code.should == 403 }
+    pending { response.response_code.should == 403 }
   end
 
   context 'スタッフとしてログインしている' do
@@ -25,6 +25,6 @@ describe Admin::RubyistsController do
       get :index
     end
 
-    it { response.should be_success }
+    pending { response.should be_success }
   end
 end
