@@ -4,7 +4,7 @@ describe RubyistsController do
   describe 'GET /show' do
     before do
       @ursm = Rubyist.make(:username => 'ursm')
-      get :show, :id => 'ursm'
+      get :show, :id => 'ursm', :locale => 'ja'
     end
 
     it { response.should be_success }
