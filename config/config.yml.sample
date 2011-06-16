@@ -21,6 +21,7 @@ development: &local
     consumer_secret: twitter_consumer_secret
     access_token: twitter_access_token
     access_secret: twitter_access_secret
+  password_secret: omniauth_password_secret
 
 production:
 

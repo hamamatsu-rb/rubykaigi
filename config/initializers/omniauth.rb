@@ -4,7 +4,7 @@ require 'openid/store/filesystem'
 Rails.application.config.middleware.use OmniAuth::Builder do
   provider :twitter, configatron.twitter.consumer_key, configatron.twitter.consumer_secret
   provider :open_id, OpenID::Store::Filesystem.new(Rails.root + 'tmp/openid')
-  provider :password, Rubykaigi::Application.config.secret_token, :identifier_key => 'username'
+  provider :password, configatron.password_secret, :identifier_key => 'username'
 end
 
 require 'digest/sha1'
